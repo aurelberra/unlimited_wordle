@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import text_answers from "./answers";
+import text_allowed from "./allowed";
+import { Component } from "react";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      answers_strings: text_answers.split("\n"),
+      allowed_strings: text_allowed.split("\n"),
+      combined_strings_set: new Set([
+        ...text_allowed.split("\n"),
+        ...text_answers.split("\n"),
+      ]),
+    };
+  }
+
+  render() {
+    console.log(this.state.answers_strings.length);
+    console.log(this.state.allowed_strings.length);
+    console.log(this.state.combined_strings_set.size);
+    return (
+      <div className="App">
+        <p>Hello World 3</p>
+      </div>
+    );
+  }
 }
 
 export default App;
