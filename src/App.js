@@ -86,7 +86,7 @@ class App extends Component {
           let extra_2 = new Set();
           for (let i = 0; i < 5; ++i) {
             if (word[i] === answers_strings[this.state.random_key][i]) {
-              temp_cell_color[curr_row][i] = "green";
+              temp_cell_color[curr_row][i] = "#6aaa64";
             } else {
               extra_1.push(i);
               extra_2.add(answers_strings[this.state.random_key][i]);
@@ -97,7 +97,7 @@ class App extends Component {
             console.log(character);
             if (extra_2.has(character)) {
               console.log("Has this character");
-              temp_cell_color[curr_row][extra_1[i]] = "yellow";
+              temp_cell_color[curr_row][extra_1[i]] = "#b59f3b";
               extra_2.delete(character);
             }
           }
@@ -151,6 +151,7 @@ class App extends Component {
                           style={{
                             color: "white",
                             textAlign: "center",
+                            fontWeight: "bold",
                           }}
                         >
                           {index_value.toUpperCase()}
