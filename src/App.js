@@ -31,6 +31,9 @@ class App extends Component {
       value: Array(6)
         .fill(0)
         .map((row) => new Array(5).fill("")),
+      cell_color: Array(6)
+        .fill(0)
+        .map((row) => new Array(5).fill("black")),
     };
   }
 
@@ -69,6 +72,7 @@ class App extends Component {
         value: temp_value,
       });
     } else if (e.keyCode === 13) {
+      //enter
       let curr_row = this.state.prevrow;
       let curr_col = this.state.prevcol;
       if (curr_col === 4) {
@@ -77,6 +81,26 @@ class App extends Component {
           word += this.state.value[curr_row][i];
         }
         if (combined_strings_set.has(word)) {
+          let temp_cell_color = this.state.cell_color;
+          let extra_1 = [];
+          let extra_2 = new Set();
+          for (let i = 0; i < 5; ++i) {
+            if (word[i] === answers_strings[this.state.random_key][i]) {
+              temp_cell_color[curr_row][i] = "green";
+            } else {
+              extra_1.push(i);
+              extra_2.add(answers_strings[this.state.random_key][i]);
+            }
+          }
+          for (let i = 0; i < extra_1.length; ++i) {
+            let character = word[extra_1[i]];
+            console.log(character);
+            if (extra_2.has(character)) {
+              console.log("Has this character");
+              temp_cell_color[curr_row][extra_1[i]] = "yellow";
+              extra_2.delete(character);
+            }
+          }
           if (curr_row <= 4) {
             curr_row++;
             curr_col = -1;
@@ -88,6 +112,7 @@ class App extends Component {
             console.log("Game Over");
           }
           this.setState({
+            cell_color: temp_cell_color,
             prevrow: curr_row,
             prevcol: curr_col,
           });
@@ -117,7 +142,20 @@ class App extends Component {
                 {name.map((index_value, cindex) => {
                   return (
                     <Col key={`${index}${cindex}`}>
-                      <p>{index_value.toUpperCase()}</p>
+                      <div
+                        style={{
+                          backgroundColor: `${this.state.cell_color[index][cindex]}`,
+                        }}
+                      >
+                        <p
+                          style={{
+                            color: "white",
+                            textAlign: "center",
+                          }}
+                        >
+                          {index_value.toUpperCase()}
+                        </p>
+                      </div>
                     </Col>
                   );
                 })}
