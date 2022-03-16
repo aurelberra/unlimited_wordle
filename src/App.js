@@ -43,6 +43,7 @@ class App extends Component {
         ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
         ["Enter", "Z", "X", "C", "V", "B", "N", "M", "Backspace"],
       ],
+      KeyboardKeyColor: Array(26).fill("grey"),
     };
   }
 
@@ -99,9 +100,14 @@ class App extends Component {
           let temp_cell_color = this.state.cell_color;
           let extra_1 = [];
           let extra_2 = new Set();
+          let temp_keyboardKeyColor = this.state.KeyboardKeyColor;
           for (let i = 0; i < 5; ++i) {
             if (word[i] === answers_strings[this.state.random_key][i]) {
-              temp_cell_color[curr_row][i] = "#6aaa64";
+              temp_cell_color[curr_row][i] = "#6aaa64"; //green color
+              var temp_keyCode = word[i].toUpperCase().charCodeAt(0) - 65;
+              // console.log(word[i].toUpperCase());
+              // console.log(word[i].toUpperCase().charCodeAt(0));
+              temp_keyboardKeyColor[temp_keyCode] = "#6aaa64";
             } else {
               extra_1.push(i);
               extra_2.add(answers_strings[this.state.random_key][i]);
@@ -112,8 +118,13 @@ class App extends Component {
             console.log(character);
             if (extra_2.has(character)) {
               console.log("Has this character");
-              temp_cell_color[curr_row][extra_1[i]] = "#c9b458";
+              var temp_keyCode = character.toUpperCase().charCodeAt(0) - 65;
+              temp_keyboardKeyColor[temp_keyCode] = "#c9b458";
+              temp_cell_color[curr_row][extra_1[i]] = "#c9b458"; //yellow color
               extra_2.delete(character);
+            } else {
+              var temp_keyCode = character.toUpperCase().charCodeAt(0) - 65;
+              temp_keyboardKeyColor[temp_keyCode] = "black";
             }
           }
           if (curr_row <= 4) {
@@ -130,12 +141,9 @@ class App extends Component {
             cell_color: temp_cell_color,
             prevrow: curr_row,
             prevcol: curr_col,
+            KeyboardKeyColor: temp_keyboardKeyColor,
             game_over: word === answers_strings[this.state.random_key],
           });
-          // if (word === answers_strings[this.state.random_key]) {
-          //   console.log("game_over");
-          //   return;
-          // }
         } else {
           console.log("word = " + word);
           console.log("Not a valid word");
@@ -207,12 +215,17 @@ class App extends Component {
             return (
               <Row key={index} xs="auto" className="justify-content-center">
                 {name.map((index_value, cindex) => {
-                  //console.log(index_value);
                   return (
                     <Col key={`${index}${cindex}`}>
                       <div
                         style={{
-                          backgroundColor: "black",
+                          backgroundColor:
+                            index_value !== "Enter" &&
+                            index_value !== "Backspace"
+                              ? this.state.KeyboardKeyColor[
+                                  index_value.charCodeAt(0) - 65
+                                ]
+                              : "grey",
                         }}
                       >
                         {index_value !== "Backspace" ? (
@@ -229,7 +242,6 @@ class App extends Component {
                             {index_value}
                           </Button>
                         ) : (
-                          //<div></div>
                           <Button
                             startIcon={
                               <BackspaceIcon style={{ color: "white" }} />
