@@ -85,7 +85,7 @@ class App extends Component {
             this.setState({
               game_over: true,
             });
-            alert("Game Over");
+            console.log("Game Over");
           }
           this.setState({
             prevrow: curr_row,
@@ -93,11 +93,11 @@ class App extends Component {
           });
         } else {
           console.log("word = " + word);
-          alert("Not a valid word");
+          console.log("Not a valid word");
         }
       } else {
         console.log("curr_col = " + curr_col);
-        alert("Word size must be 5");
+        console.log("word size must be 5");
       }
     }
   };
