@@ -1,13 +1,11 @@
 import text_answers from "./answers";
 import text_allowed from "./allowed";
 import React, { Component } from "react";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Container from "react-bootstrap/Container";
-import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import BackspaceIcon from "@mui/icons-material/Backspace";
 import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+import IconButton from "@mui/material/IconButton";
 
 const mx = text_answers.split("\n").length - 1;
 const answers_strings = text_answers.split("\n");
@@ -184,85 +182,106 @@ class App extends Component {
       <div className="App">
         <p>{curr_answer}</p>
         <div className="wordle_grid">
-          <Container>
-            {this.state.value.map((name, index) => {
-              return (
-                <Row key={index} lg={5} md={5} sm={5} xl={5} xs={5} xxl={5}>
-                  {name.map((index_value, cindex) => {
-                    return (
-                      <Col key={`${index}${cindex}`}>
-                        <div
+          {this.state.value.map((name, index) => {
+            return (
+              <Stack
+                key={index}
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                spacing={1}
+              >
+                {name.map((index_value, cindex) => {
+                  return (
+                    <div
+                      key={`${index}${cindex}`}
+                      style={{
+                        backgroundColor: `${this.state.cell_color[index][cindex]}`,
+                        width: "50px",
+                        height: "50px",
+                        margin: 1,
+                      }}
+                    >
+                      <p
+                        style={{
+                          color: "white",
+                          textAlign: "center",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {index_value.toUpperCase()}
+                      </p>
+                    </div>
+                  );
+                })}
+              </Stack>
+            );
+          })}
+        </div>
+        <div
+          className="onscreenkeyboard"
+          style={{ justifyContent: "center", alignItems: "flex-end" }}
+        >
+          {OnScreenKeyboard.map((name, index) => {
+            //console.log(name.length);
+            //const len = name.length;
+            return (
+              <Stack
+                key={index}
+                direction="row"
+                justifyContent="center"
+                alignItems="flex-end"
+                spacing={1}
+              >
+                {name.map((index_value, cindex) => {
+                  const col_xs =
+                    index_value === "Enter" || index_value === "Backspace"
+                      ? "auto"
+                      : 1;
+                  console.log(index_value);
+                  console.log(col_xs);
+                  return (
+                    <div key={`${index}${cindex}`} style={{ margin: "1px" }}>
+                      {index_value !== "Backspace" ? (
+                        <Button
+                          variant="contained"
                           style={{
-                            backgroundColor: `${this.state.cell_color[index][cindex]}`,
+                            backgroundColor:
+                              index_value !== "Enter" &&
+                              index_value !== "Backspace"
+                                ? this.state.KeyboardKeyColor[
+                                    index_value.charCodeAt(0) - 65
+                                  ]
+                                : "grey",
+                            textAlign: "center",
+                            fontWeight: "bold",
+                          }}
+                          onClick={() => {
+                            this.handleKeyboard(index_value);
                           }}
                         >
-                          <p
-                            style={{
-                              color: "white",
-                              textAlign: "center",
-                              fontWeight: "bold",
-                            }}
-                          >
-                            {index_value.toUpperCase()}
-                          </p>
-                        </div>
-                      </Col>
-                    );
-                  })}
-                </Row>
-              );
-            })}
-          </Container>
-        </div>
-        <div className="onscreenkeyboard">
-          <Container>
-            {OnScreenKeyboard.map((name, index) => {
-              console.log(name.length);
-              const len = name.length;
-              return (
-                <Row key={index} xs={len}>
-                  {name.map((index_value, cindex) => {
-                    return (
-                      <Col key={`${index}${cindex}`}>
-                        {index_value !== "Backspace" ? (
-                          <Button
-                            variant="contained"
-                            style={{
-                              backgroundColor:
-                                index_value !== "Enter" &&
-                                index_value !== "Backspace"
-                                  ? this.state.KeyboardKeyColor[
-                                      index_value.charCodeAt(0) - 65
-                                    ]
-                                  : "grey",
-                              textAlign: "center",
-                              fontWeight: "bold",
-                            }}
-                            onClick={() => {
-                              this.handleKeyboard(index_value);
-                            }}
-                          >
-                            {index_value}
-                          </Button>
-                        ) : (
-                          <Button
-                            variant="contained"
-                            style={{ background: "grey" }}
-                            startIcon={
-                              <BackspaceIcon style={{ color: "white" }} />
-                            }
-                            onClick={() => {
-                              this.handleKeyboard(index_value);
-                            }}
-                          />
-                        )}
-                      </Col>
-                    );
-                  })}
-                </Row>
-              );
-            })}
-          </Container>
+                          {index_value}
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="contained"
+                          style={{ background: "grey" }}
+                          startIcon={
+                            <BackspaceIcon style={{ color: "white" }} />
+                          }
+                          onClick={() => {
+                            this.handleKeyboard(index_value);
+                          }}
+                        >
+                          Backspace
+                        </Button>
+                      )}
+                    </div>
+                  );
+                })}
+              </Stack>
+            );
+          })}
         </div>
       </div>
     );
