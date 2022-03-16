@@ -97,7 +97,7 @@ class App extends Component {
             console.log(character);
             if (extra_2.has(character)) {
               console.log("Has this character");
-              temp_cell_color[curr_row][extra_1[i]] = "#b59f3b";
+              temp_cell_color[curr_row][extra_1[i]] = "#c9b458";
               extra_2.delete(character);
             }
           }
