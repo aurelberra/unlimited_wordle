@@ -1,23 +1,15 @@
 import text_answers from "./answers";
 import text_allowed from "./allowed";
 import React, { Component } from "react";
-//import Grid from "@material-ui/core/Grid";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import "bootstrap/dist/css/bootstrap.css";
-//import Item from "@material-ui/core/Item";
-//import Input from "@material-ui/core/Input";
-// import RICIBs from "react-individual-character-input-boxes";
-// import default_value from "./default";
 import "./App.css";
 import BackspaceIcon from "@mui/icons-material/Backspace";
-//import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-//import { Button } from "bootstrap";
 import Button from "@material-ui/core/Button";
 
 const mx = text_answers.split("\n").length - 1;
 const answers_strings = text_answers.split("\n");
-const allowed_strings = text_allowed.split("\n");
 const combined_strings_set = new Set([
   ...text_allowed.split("\n"),
   ...text_answers.split("\n"),
@@ -62,19 +54,13 @@ class App extends Component {
       return;
     }
     if (e.keyCode >= 65 && e.keyCode <= 90) {
-      //let temp_currow = Object.assign({}, this.state.prevrow);
       let temp_currow = this.state.prevrow.valueOf();
-      //let temp_currow = this.state.prevrow;
-      //temp_currow++;
       console.log(this.state.prevrow);
-      //let temp_currcol = Object.assign({}, this.state.prevcol);
       let temp_currcol = this.state.prevcol.valueOf();
-      //let temp_currcol = this.state.prevcol;
       console.log(temp_currow);
       console.log(temp_currcol);
       if (temp_currcol <= 3) {
         temp_currcol++;
-        //let temp_value = Object.assign({}, this.state.value);
         let temp_value = [...this.state.value];
         console.log(temp_value);
         temp_value[temp_currow][temp_currcol] = e.key.toLowerCase();
@@ -118,8 +104,6 @@ class App extends Component {
             if (word[i] === answers_strings[random_key][i]) {
               temp_cell_color[curr_row][i] = "#6aaa64"; //green color
               const temp_keyCode = word[i].toUpperCase().charCodeAt(0) - 65;
-              // console.log(word[i].toUpperCase());
-              // console.log(word[i].toUpperCase().charCodeAt(0));
               temp_keyboardKeyColor[temp_keyCode] = "#6aaa64";
             } else {
               extra_1.push(i);
@@ -128,11 +112,13 @@ class App extends Component {
           }
           for (let i = 0; i < extra_1.length; ++i) {
             const character = word[extra_1[i]];
-            console.log(character);
+            //console.log(character);
             if (extra_2.has(character)) {
-              console.log("Has this character");
+              //console.log("Has this character");
               const temp_keyCode = character.toUpperCase().charCodeAt(0) - 65;
-              temp_keyboardKeyColor[temp_keyCode] = "#c9b458";
+              if (temp_keyboardKeyColor[temp_keyCode] !== "#6aaa64") {
+                temp_keyboardKeyColor[temp_keyCode] = "#c9b458";
+              }
               temp_cell_color[curr_row][extra_1[i]] = "#c9b458"; //yellow color
               extra_2.delete(character);
             } else {
@@ -169,7 +155,6 @@ class App extends Component {
   };
 
   handleKeyboard = (value) => {
-    var temp_key = value;
     var temp_keyCode;
     if (value === "Backspace") {
       temp_keyCode = 8;
@@ -179,7 +164,7 @@ class App extends Component {
       temp_keyCode = value.charCodeAt(0);
     }
     var spaceEvnt = new KeyboardEvent("keydown", {
-      key: temp_key,
+      key: value,
       keyCode: temp_keyCode,
       which: temp_keyCode,
     });
