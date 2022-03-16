@@ -10,6 +10,10 @@ import "bootstrap/dist/css/bootstrap.css";
 // import RICIBs from "react-individual-character-input-boxes";
 // import default_value from "./default";
 import "./App.css";
+import BackspaceIcon from "@mui/icons-material/Backspace";
+//import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+//import { Button } from "bootstrap";
+import Button from "@material-ui/core/Button";
 
 var mx = text_answers.split("\n").length - 1;
 var answers_strings = text_answers.split("\n");
@@ -34,11 +38,22 @@ class App extends Component {
       cell_color: Array(6)
         .fill(0)
         .map((row) => new Array(5).fill("black")),
+      OnScreenKeyboard: [
+        ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
+        ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
+        ["Enter", "Z", "X", "C", "V", "B", "N", "M", "Backspace"],
+      ],
     };
   }
 
   handleOnKeyPress = async (e) => {
     console.log(e.key);
+    if (e.ctrlKey) {
+      return;
+    }
+    if (e.altKey) {
+      return;
+    }
     if (this.state.game_over) {
       return;
     }
@@ -115,7 +130,12 @@ class App extends Component {
             cell_color: temp_cell_color,
             prevrow: curr_row,
             prevcol: curr_col,
+            game_over: word === answers_strings[this.state.random_key],
           });
+          // if (word === answers_strings[this.state.random_key]) {
+          //   console.log("game_over");
+          //   return;
+          // }
         } else {
           console.log("word = " + word);
           console.log("Not a valid word");
@@ -125,6 +145,24 @@ class App extends Component {
         console.log("word size must be 5");
       }
     }
+  };
+
+  handleKeyboard = (value) => {
+    var temp_key = value;
+    var temp_keyCode;
+    if (value === "Backspace") {
+      temp_keyCode = 8;
+    } else if (value === "Enter") {
+      temp_keyCode = 13;
+    } else {
+      temp_keyCode = value.charCodeAt(0);
+    }
+    var spaceEvnt = new KeyboardEvent("keydown", {
+      key: temp_key,
+      keyCode: temp_keyCode,
+      which: temp_keyCode,
+    });
+    document.dispatchEvent(spaceEvnt);
   };
 
   componentDidMount() {
@@ -156,6 +194,51 @@ class App extends Component {
                         >
                           {index_value.toUpperCase()}
                         </p>
+                      </div>
+                    </Col>
+                  );
+                })}
+              </Row>
+            );
+          })}
+        </div>
+        <div className="onscreenkeyboard">
+          {this.state.OnScreenKeyboard.map((name, index) => {
+            return (
+              <Row key={index} xs="auto" className="justify-content-center">
+                {name.map((index_value, cindex) => {
+                  //console.log(index_value);
+                  return (
+                    <Col key={`${index}${cindex}`}>
+                      <div
+                        style={{
+                          backgroundColor: "black",
+                        }}
+                      >
+                        {index_value !== "Backspace" ? (
+                          <Button
+                            style={{
+                              color: "white",
+                              textAlign: "center",
+                              fontWeight: "bold",
+                            }}
+                            onClick={() => {
+                              this.handleKeyboard(index_value);
+                            }}
+                          >
+                            {index_value}
+                          </Button>
+                        ) : (
+                          //<div></div>
+                          <Button
+                            startIcon={
+                              <BackspaceIcon style={{ color: "white" }} />
+                            }
+                            onClick={() => {
+                              this.handleKeyboard(index_value);
+                            }}
+                          ></Button>
+                        )}
                       </div>
                     </Col>
                   );
