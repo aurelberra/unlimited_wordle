@@ -21,7 +21,8 @@ const OnScreenKeyboard = [
 ];
 
 const random_key = Math.floor(Math.random() * mx);
-
+//const curr_answer = answers_strings[random_key];
+const curr_answer = "uncle";
 class App extends Component {
   constructor(props) {
     super(props);
@@ -100,13 +101,13 @@ class App extends Component {
           let extra_2 = new Set();
           let temp_keyboardKeyColor = [...this.state.KeyboardKeyColor];
           for (let i = 0; i < 5; ++i) {
-            if (word[i] === answers_strings[random_key][i]) {
+            if (word[i] === curr_answer[i]) {
               temp_cell_color[curr_row][i] = "#6aaa64"; //green color
               const temp_keyCode = word[i].toUpperCase().charCodeAt(0) - 65;
               temp_keyboardKeyColor[temp_keyCode] = "#6aaa64";
             } else {
               extra_1.push(i);
-              extra_2.add(answers_strings[random_key][i]);
+              extra_2.add(curr_answer[i]);
             }
           }
           for (let i = 0; i < extra_1.length; ++i) {
@@ -122,7 +123,9 @@ class App extends Component {
               extra_2.delete(character);
             } else {
               const temp_keyCode = character.toUpperCase().charCodeAt(0) - 65;
-              temp_keyboardKeyColor[temp_keyCode] = "black";
+              if (temp_keyboardKeyColor[temp_keyCode] !== "#6aaa64") {
+                temp_keyboardKeyColor[temp_keyCode] = "black";
+              }
             }
           }
           if (curr_row <= 4) {
@@ -140,7 +143,7 @@ class App extends Component {
             prevrow: curr_row,
             prevcol: curr_col,
             KeyboardKeyColor: temp_keyboardKeyColor,
-            game_over: word === answers_strings[random_key],
+            game_over: word === curr_answer,
           });
         } else {
           console.log("word = " + word);
@@ -178,7 +181,7 @@ class App extends Component {
     console.log("rerender");
     return (
       <div className="App">
-        <p>{answers_strings[random_key]}</p>
+        <p>{curr_answer}</p>
         <div className="wordle_grid">
           {this.state.value.map((name, index) => {
             return (
