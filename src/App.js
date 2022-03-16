@@ -15,20 +15,27 @@ import BackspaceIcon from "@mui/icons-material/Backspace";
 //import { Button } from "bootstrap";
 import Button from "@material-ui/core/Button";
 
-var mx = text_answers.split("\n").length - 1;
-var answers_strings = text_answers.split("\n");
-var allowed_strings = text_allowed.split("\n");
-var combined_strings_set = new Set([
+const mx = text_answers.split("\n").length - 1;
+const answers_strings = text_answers.split("\n");
+const allowed_strings = text_allowed.split("\n");
+const combined_strings_set = new Set([
   ...text_allowed.split("\n"),
   ...text_answers.split("\n"),
 ]);
+
+const OnScreenKeyboard = [
+  ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
+  ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
+  ["Enter", "Z", "X", "C", "V", "B", "N", "M", "Backspace"],
+];
+
+const random_key = Math.floor(Math.random() * mx);
 
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      random_key: Math.floor(Math.random() * mx),
       game_over: false,
       prevrow: 0,
       prevcol: -1,
@@ -38,11 +45,7 @@ class App extends Component {
       cell_color: Array(6)
         .fill(0)
         .map((row) => new Array(5).fill("black")),
-      OnScreenKeyboard: [
-        ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
-        ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
-        ["Enter", "Z", "X", "C", "V", "B", "N", "M", "Backspace"],
-      ],
+
       KeyboardKeyColor: Array(26).fill("grey"),
     };
   }
@@ -58,12 +61,22 @@ class App extends Component {
     if (this.state.game_over) {
       return;
     }
-    if (e.keyCode >= 65 && e.keyCode <= 90 && !e.ctrlKey) {
-      let temp_currow = this.state.prevrow;
-      let temp_currcol = this.state.prevcol;
+    if (e.keyCode >= 65 && e.keyCode <= 90) {
+      //let temp_currow = Object.assign({}, this.state.prevrow);
+      let temp_currow = this.state.prevrow.valueOf();
+      //let temp_currow = this.state.prevrow;
+      //temp_currow++;
+      console.log(this.state.prevrow);
+      //let temp_currcol = Object.assign({}, this.state.prevcol);
+      let temp_currcol = this.state.prevcol.valueOf();
+      //let temp_currcol = this.state.prevcol;
+      console.log(temp_currow);
+      console.log(temp_currcol);
       if (temp_currcol <= 3) {
         temp_currcol++;
-        let temp_value = this.state.value;
+        //let temp_value = Object.assign({}, this.state.value);
+        let temp_value = [...this.state.value];
+        console.log(temp_value);
         temp_value[temp_currow][temp_currcol] = e.key.toLowerCase();
         this.setState({
           prevrow: temp_currow,
@@ -73,9 +86,9 @@ class App extends Component {
       }
     } else if (e.keyCode === 8) {
       //backspace
-      let temp_prevrow = this.state.prevrow;
-      let temp_prevcol = this.state.prevcol;
-      let temp_value = this.state.value;
+      let temp_prevrow = this.state.prevrow.valueOf();
+      let temp_prevcol = this.state.prevcol.valueOf();
+      let temp_value = [...this.state.value];
       temp_value[temp_prevrow][temp_prevcol] = "";
       if (temp_prevcol >= 0) {
         temp_prevcol--;
@@ -89,41 +102,41 @@ class App extends Component {
       });
     } else if (e.keyCode === 13) {
       //enter
-      let curr_row = this.state.prevrow;
-      let curr_col = this.state.prevcol;
+      let curr_row = this.state.prevrow.valueOf();
+      let curr_col = this.state.prevcol.valueOf();
       if (curr_col === 4) {
         let word = "";
         for (let i = 0; i < 5; ++i) {
-          word += this.state.value[curr_row][i];
+          word += this.state.value[curr_row][i].valueOf();
         }
         if (combined_strings_set.has(word)) {
-          let temp_cell_color = this.state.cell_color;
+          let temp_cell_color = [...this.state.cell_color];
           let extra_1 = [];
           let extra_2 = new Set();
-          let temp_keyboardKeyColor = this.state.KeyboardKeyColor;
+          let temp_keyboardKeyColor = [...this.state.KeyboardKeyColor];
           for (let i = 0; i < 5; ++i) {
-            if (word[i] === answers_strings[this.state.random_key][i]) {
+            if (word[i] === answers_strings[random_key][i]) {
               temp_cell_color[curr_row][i] = "#6aaa64"; //green color
-              var temp_keyCode = word[i].toUpperCase().charCodeAt(0) - 65;
+              const temp_keyCode = word[i].toUpperCase().charCodeAt(0) - 65;
               // console.log(word[i].toUpperCase());
               // console.log(word[i].toUpperCase().charCodeAt(0));
               temp_keyboardKeyColor[temp_keyCode] = "#6aaa64";
             } else {
               extra_1.push(i);
-              extra_2.add(answers_strings[this.state.random_key][i]);
+              extra_2.add(answers_strings[random_key][i]);
             }
           }
           for (let i = 0; i < extra_1.length; ++i) {
-            let character = word[extra_1[i]];
+            const character = word[extra_1[i]];
             console.log(character);
             if (extra_2.has(character)) {
               console.log("Has this character");
-              var temp_keyCode = character.toUpperCase().charCodeAt(0) - 65;
+              const temp_keyCode = character.toUpperCase().charCodeAt(0) - 65;
               temp_keyboardKeyColor[temp_keyCode] = "#c9b458";
               temp_cell_color[curr_row][extra_1[i]] = "#c9b458"; //yellow color
               extra_2.delete(character);
             } else {
-              var temp_keyCode = character.toUpperCase().charCodeAt(0) - 65;
+              const temp_keyCode = character.toUpperCase().charCodeAt(0) - 65;
               temp_keyboardKeyColor[temp_keyCode] = "black";
             }
           }
@@ -142,7 +155,7 @@ class App extends Component {
             prevrow: curr_row,
             prevcol: curr_col,
             KeyboardKeyColor: temp_keyboardKeyColor,
-            game_over: word === answers_strings[this.state.random_key],
+            game_over: word === answers_strings[random_key],
           });
         } else {
           console.log("word = " + word);
@@ -178,9 +191,10 @@ class App extends Component {
   }
 
   render() {
+    console.log("rerender");
     return (
       <div className="App">
-        <p>{answers_strings[this.state.random_key]}</p>
+        <p>{answers_strings[random_key]}</p>
         <div className="wordle_grid">
           {this.state.value.map((name, index) => {
             return (
@@ -211,7 +225,7 @@ class App extends Component {
           })}
         </div>
         <div className="onscreenkeyboard">
-          {this.state.OnScreenKeyboard.map((name, index) => {
+          {OnScreenKeyboard.map((name, index) => {
             return (
               <Row key={index} xs="auto" className="justify-content-center">
                 {name.map((index_value, cindex) => {
