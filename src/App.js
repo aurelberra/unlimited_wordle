@@ -6,7 +6,7 @@ import Col from "react-bootstrap/Col";
 import "bootstrap/dist/css/bootstrap.css";
 import "./App.css";
 import BackspaceIcon from "@mui/icons-material/Backspace";
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 
 const mx = text_answers.split("\n").length - 1;
 const answers_strings = text_answers.split("\n");
@@ -14,7 +14,6 @@ const combined_strings_set = new Set([
   ...text_allowed.split("\n"),
   ...text_answers.split("\n"),
 ]);
-
 const OnScreenKeyboard = [
   ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
   ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
