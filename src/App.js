@@ -197,11 +197,19 @@ class App extends Component {
     console.log("window width = " + this.state.window_width);
     console.log("window width = " + this.state.window_height);
     console.log("rerender");
+    console.log(curr_answer);
     return (
       <div className="App">
-        <p>{curr_answer}</p>
-        <div className="wordle_grid">
+        <div className="wordle_grid" style={{ marginTop: 10 }}>
           {this.state.value.map((name, index) => {
+            var sz_w = Math.floor(this.state.window_width / name.length);
+            if (sz_w > 100) {
+              sz_w = 100;
+            }
+            var sz_h = (2 * this.state.window_height) / 24;
+            if (sz_h > 100) {
+              sz_h = 100;
+            }
             return (
               <Stack
                 key={index}
@@ -216,8 +224,8 @@ class App extends Component {
                       key={`${index}${cindex}`}
                       style={{
                         backgroundColor: `${this.state.cell_color[index][cindex]}`,
-                        width: "50px",
-                        height: "50px",
+                        width: sz_h,
+                        height: sz_h,
                         margin: 1,
                       }}
                     >
@@ -251,12 +259,12 @@ class App extends Component {
             if (sz_w > 100) {
               sz_w = 100;
             }
-            var sz_h = this.state.window_height / 9;
+            var sz_h = Math.floor(this.state.window_height / 9);
             if (sz_h > 100) {
               sz_h = 100;
             }
             console.log(sz_w);
-            console.log(sz_h);
+            console.log(sz_h); //
             return (
               <Stack
                 key={index}
