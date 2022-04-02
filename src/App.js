@@ -3,6 +3,7 @@ import text_allowed from "./allowed";
 import React, { Component } from "react";
 import "./App.css";
 import BackspaceIcon from "@mui/icons-material/Backspace";
+import CheckIcon from "@mui/icons-material/Check";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 //import IconButton from "@mui/material/IconButton";
@@ -27,6 +28,8 @@ class App extends Component {
     super(props);
 
     this.state = {
+      window_width: 0,
+      window_height: 0,
       game_over: false,
       prevrow: 0,
       prevcol: -1,
@@ -39,6 +42,7 @@ class App extends Component {
 
       KeyboardKeyColor: Array(26).fill("grey"),
     };
+    this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
   }
 
   handleOnKeyPress = async (e) => {
@@ -173,10 +177,25 @@ class App extends Component {
   };
 
   componentDidMount() {
+    this.updateWindowDimensions();
+    window.addEventListener("resize", this.updateWindowDimensions);
     document.addEventListener("keydown", this.handleOnKeyPress, false);
   }
 
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.updateWindowDimensions);
+  }
+
+  updateWindowDimensions() {
+    this.setState({
+      window_width: window.innerWidth,
+      window_height: window.innerHeight,
+    });
+  }
+
   render() {
+    console.log("window width = " + this.state.window_width);
+    console.log("window width = " + this.state.window_height);
     console.log("rerender");
     return (
       <div className="App">
@@ -228,8 +247,10 @@ class App extends Component {
           }}
         >
           {OnScreenKeyboard.map((name, index) => {
-            //console.log(name.length);
-            //const len = name.length;
+            const sz_w = Math.floor(this.state.window_width / name.length);
+            const sz_h = this.state.window_height / 9;
+            console.log(sz_w);
+            console.log(sz_h);
             return (
               <Stack
                 key={index}
@@ -239,15 +260,9 @@ class App extends Component {
                 spacing={1}
               >
                 {name.map((index_value, cindex) => {
-                  const col_xs =
-                    index_value === "Enter" || index_value === "Backspace"
-                      ? "auto"
-                      : 1;
-                  console.log(index_value);
-                  console.log(col_xs);
                   return (
                     <div key={`${index}${cindex}`} style={{ margin: "1px" }}>
-                      {index_value !== "Backspace" ? (
+                      {index_value !== "Backspace" && index_value != "Enter" ? (
                         <Button
                           variant="contained"
                           style={{
@@ -260,10 +275,10 @@ class App extends Component {
                                 : "grey",
                             textAlign: "center",
                             fontWeight: "bold",
-                            maxWidth:
-                              index_value === "Enter" ? "50px" : "35.5px",
-                            minWidth:
-                              index_value === "Enter" ? "50px" : "35.5px",
+                            maxWidth: sz_w,
+                            minWidth: sz_w,
+                            maxHeight: sz_h,
+                            minHeight: sz_h,
                           }}
                           onClick={() => {
                             this.handleKeyboard(index_value);
@@ -274,14 +289,23 @@ class App extends Component {
                       ) : (
                         <Button
                           variant="contained"
-                          style={{ background: "grey" }}
-                          startIcon={
-                            <BackspaceIcon style={{ color: "white" }} />
-                          }
+                          style={{
+                            background: "grey",
+                            maxWidth: sz_w,
+                            minWidth: sz_w,
+                            maxHeight: sz_h,
+                            minHeight: sz_h,
+                          }}
                           onClick={() => {
                             this.handleKeyboard(index_value);
                           }}
-                        />
+                        >
+                          {index_value === "Enter" ? (
+                            <CheckIcon style={{ color: "white" }} />
+                          ) : (
+                            <BackspaceIcon style={{ color: "white" }} />
+                          )}
+                        </Button>
                       )}
                     </div>
                   );
