@@ -5,7 +5,7 @@ import "./App.css";
 import BackspaceIcon from "@mui/icons-material/Backspace";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
-import IconButton from "@mui/material/IconButton";
+//import IconButton from "@mui/material/IconButton";
 
 const mx = text_answers.split("\n").length - 1;
 const answers_strings = text_answers.split("\n");
@@ -219,8 +219,13 @@ class App extends Component {
           })}
         </div>
         <div
-          className="onscreenkeyboard"
-          style={{ justifyContent: "center", alignItems: "flex-end" }}
+          style={{
+            position: "absolute",
+            bottom: 0,
+            alignContent: "center",
+            left: 0,
+            right: 0,
+          }}
         >
           {OnScreenKeyboard.map((name, index) => {
             //console.log(name.length);
@@ -255,6 +260,10 @@ class App extends Component {
                                 : "grey",
                             textAlign: "center",
                             fontWeight: "bold",
+                            maxWidth:
+                              index_value === "Enter" ? "50px" : "35.5px",
+                            minWidth:
+                              index_value === "Enter" ? "50px" : "35.5px",
                           }}
                           onClick={() => {
                             this.handleKeyboard(index_value);
@@ -272,9 +281,7 @@ class App extends Component {
                           onClick={() => {
                             this.handleKeyboard(index_value);
                           }}
-                        >
-                          Backspace
-                        </Button>
+                        />
                       )}
                     </div>
                   );
