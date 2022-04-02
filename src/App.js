@@ -21,7 +21,7 @@ const OnScreenKeyboard = [
 
 const random_key = Math.floor(Math.random() * mx);
 const curr_answer = answers_strings[random_key];
-//const curr_answer = ;
+
 class App extends Component {
   constructor(props) {
     super(props);
