@@ -247,8 +247,14 @@ class App extends Component {
           }}
         >
           {OnScreenKeyboard.map((name, index) => {
-            const sz_w = Math.floor(this.state.window_width / name.length);
-            const sz_h = this.state.window_height / 9;
+            var sz_w = Math.floor(this.state.window_width / name.length);
+            if (sz_w > 100) {
+              sz_w = 100;
+            }
+            var sz_h = this.state.window_height / 9;
+            if (sz_h > 100) {
+              sz_h = 100;
+            }
             console.log(sz_w);
             console.log(sz_h);
             return (
@@ -301,9 +307,15 @@ class App extends Component {
                           }}
                         >
                           {index_value === "Enter" ? (
-                            <CheckIcon style={{ color: "white" }} />
+                            <CheckIcon
+                              fontSize="medium"
+                              style={{ color: "white" }}
+                            />
                           ) : (
-                            <BackspaceIcon style={{ color: "white" }} />
+                            <BackspaceIcon
+                              fontSize="medium"
+                              style={{ color: "white" }}
+                            />
                           )}
                         </Button>
                       )}
