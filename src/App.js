@@ -6,7 +6,7 @@ import BackspaceIcon from "@mui/icons-material/Backspace";
 import CheckIcon from "@mui/icons-material/Check";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
-//import IconButton from "@mui/material/IconButton";
+//belie
 
 const mx = text_answers.split("\n").length - 1;
 const answers_strings = text_answers.split("\n");
@@ -21,8 +21,8 @@ const OnScreenKeyboard = [
 ];
 
 const random_key = Math.floor(Math.random() * mx);
-const curr_answer = answers_strings[random_key];
-
+//const curr_answer = answers_strings[random_key];
+const curr_answer = "belie";
 class App extends Component {
   constructor(props) {
     super(props);
@@ -107,7 +107,7 @@ class App extends Component {
             if (word[i] === curr_answer[i]) {
               temp_cell_color[curr_row][i] = "#6aaa64"; //green color
               const temp_keyCode = word[i].toUpperCase().charCodeAt(0) - 65;
-              temp_keyboardKeyColor[temp_keyCode] = "#6aaa64";
+              temp_keyboardKeyColor[temp_keyCode] = "#6aaa64"; //green color
             } else {
               extra_1.push(i);
               extra_2.add(curr_answer[i]);
@@ -120,14 +120,18 @@ class App extends Component {
               //console.log("Has this character");
               const temp_keyCode = character.toUpperCase().charCodeAt(0) - 65;
               if (temp_keyboardKeyColor[temp_keyCode] !== "#6aaa64") {
-                temp_keyboardKeyColor[temp_keyCode] = "#c9b458";
+                //green color
+                temp_keyboardKeyColor[temp_keyCode] = "#c9b458"; //yellow color
               }
               temp_cell_color[curr_row][extra_1[i]] = "#c9b458"; //yellow color
               extra_2.delete(character);
             } else {
               const temp_keyCode = character.toUpperCase().charCodeAt(0) - 65;
-              if (temp_keyboardKeyColor[temp_keyCode] !== "#6aaa64") {
-                temp_cell_color[curr_row][extra_1[i]] = "#3a3a3c";
+              temp_cell_color[curr_row][extra_1[i]] = "#3a3a3c"; //yellow color
+              if (
+                temp_keyboardKeyColor[temp_keyCode] !== "#6aaa64" && //green color
+                temp_keyboardKeyColor[temp_keyCode] !== "#c9b458" //yellow color
+              ) {
                 temp_keyboardKeyColor[temp_keyCode] = "#3a3a3c";
               }
             }
