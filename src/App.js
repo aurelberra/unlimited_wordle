@@ -38,9 +38,9 @@ class App extends Component {
         .map((row) => new Array(5).fill("")),
       cell_color: Array(6)
         .fill(0)
-        .map((row) => new Array(5).fill("black")),
+        .map((row) => new Array(5).fill("#121212")),
 
-      KeyboardKeyColor: Array(26).fill("grey"),
+      KeyboardKeyColor: Array(26).fill("#818384"),
     };
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
   }
@@ -127,7 +127,8 @@ class App extends Component {
             } else {
               const temp_keyCode = character.toUpperCase().charCodeAt(0) - 65;
               if (temp_keyboardKeyColor[temp_keyCode] !== "#6aaa64") {
-                temp_keyboardKeyColor[temp_keyCode] = "black";
+                temp_cell_color[curr_row][extra_1[i]] = "#3a3a3c";
+                temp_keyboardKeyColor[temp_keyCode] = "#3a3a3c";
               }
             }
           }
@@ -200,13 +201,12 @@ class App extends Component {
     console.log(curr_answer);
     return (
       <div className="App">
-        <div className="wordle_grid" style={{ marginTop: 10 }}>
+        <nav>
+          <h1>Unlimited Wordle</h1>
+        </nav>
+        <div className="wordle_grid" style={{ marginTop: 30 }}>
           {this.state.value.map((name, index) => {
-            var sz_w = Math.floor(this.state.window_width / name.length);
-            if (sz_w > 100) {
-              sz_w = 100;
-            }
-            var sz_h = (2 * this.state.window_height) / 24;
+            var sz_h = (2 * this.state.window_height) / 30;
             if (sz_h > 100) {
               sz_h = 100;
             }
@@ -226,7 +226,8 @@ class App extends Component {
                         backgroundColor: `${this.state.cell_color[index][cindex]}`,
                         width: sz_h,
                         height: sz_h,
-                        margin: 1,
+                        margin: 5,
+                        border: "5px solid #212121",
                       }}
                     >
                       <p
@@ -234,6 +235,7 @@ class App extends Component {
                           color: "white",
                           textAlign: "center",
                           fontWeight: "bold",
+                          fontSize: 25,
                         }}
                       >
                         {index_value.toUpperCase()}
@@ -264,7 +266,7 @@ class App extends Component {
               sz_h = 100;
             }
             console.log(sz_w);
-            console.log(sz_h); //
+            console.log(sz_h);
             return (
               <Stack
                 key={index}
@@ -276,39 +278,39 @@ class App extends Component {
                 {name.map((index_value, cindex) => {
                   return (
                     <div key={`${index}${cindex}`} style={{ margin: "1px" }}>
-                      {index_value !== "Backspace" && index_value != "Enter" ? (
+                      {index_value !== "Backspace" &&
+                      index_value !== "Enter" ? (
                         <Button
                           variant="contained"
                           style={{
                             backgroundColor:
-                              index_value !== "Enter" &&
-                              index_value !== "Backspace"
-                                ? this.state.KeyboardKeyColor[
-                                    index_value.charCodeAt(0) - 65
-                                  ]
-                                : "grey",
+                              this.state.KeyboardKeyColor[
+                                index_value.charCodeAt(0) - 65
+                              ],
                             textAlign: "center",
                             fontWeight: "bold",
                             maxWidth: sz_w,
                             minWidth: sz_w,
                             maxHeight: sz_h,
                             minHeight: sz_h,
+                            margin: 5,
                           }}
                           onClick={() => {
                             this.handleKeyboard(index_value);
                           }}
                         >
-                          {index_value}
+                          <p style={{ fontSize: 30 }}>{index_value}</p>
                         </Button>
                       ) : (
                         <Button
                           variant="contained"
                           style={{
-                            background: "grey",
+                            background: "#818384",
                             maxWidth: sz_w,
                             minWidth: sz_w,
                             maxHeight: sz_h,
                             minHeight: sz_h,
+                            margin: 5,
                           }}
                           onClick={() => {
                             this.handleKeyboard(index_value);
