@@ -6,8 +6,15 @@ import BackspaceIcon from "@mui/icons-material/Backspace";
 import CheckIcon from "@mui/icons-material/Check";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
-//belie
 
+const colors = {
+  green: "#6aaa64",
+  black: "#121212",
+  grey: "#818384",
+  yellow: "#c9b458",
+  dark_grey: "#3a3a3c",
+  very_dark_grey: "#212121",
+};
 const mx = text_answers.split("\n").length - 1;
 const answers_strings = text_answers.split("\n");
 const combined_strings_set = new Set([
@@ -38,9 +45,9 @@ class App extends Component {
         .map((row) => new Array(5).fill("")),
       cell_color: Array(6)
         .fill(0)
-        .map((row) => new Array(5).fill("#121212")),
+        .map((row) => new Array(5).fill(colors.black)),
 
-      KeyboardKeyColor: Array(26).fill("#818384"),
+      KeyboardKeyColor: Array(26).fill(colors.grey),
     };
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
   }
@@ -105,9 +112,9 @@ class App extends Component {
           let temp_keyboardKeyColor = [...this.state.KeyboardKeyColor];
           for (let i = 0; i < 5; ++i) {
             if (word[i] === curr_answer[i]) {
-              temp_cell_color[curr_row][i] = "#6aaa64"; //green color
+              temp_cell_color[curr_row][i] = colors.green; //green color
               const temp_keyCode = word[i].toUpperCase().charCodeAt(0) - 65;
-              temp_keyboardKeyColor[temp_keyCode] = "#6aaa64"; //green color
+              temp_keyboardKeyColor[temp_keyCode] = colors.green; //green color
             } else {
               extra_1.push(i);
               extra_2.add(curr_answer[i]);
@@ -119,20 +126,19 @@ class App extends Component {
             if (extra_2.has(character)) {
               //console.log("Has this character");
               const temp_keyCode = character.toUpperCase().charCodeAt(0) - 65;
-              if (temp_keyboardKeyColor[temp_keyCode] !== "#6aaa64") {
-                //green color
-                temp_keyboardKeyColor[temp_keyCode] = "#c9b458"; //yellow color
+              if (temp_keyboardKeyColor[temp_keyCode] !== colors.green) {
+                temp_keyboardKeyColor[temp_keyCode] = colors.yellow;
               }
-              temp_cell_color[curr_row][extra_1[i]] = "#c9b458"; //yellow color
+              temp_cell_color[curr_row][extra_1[i]] = colors.yellow;
               extra_2.delete(character);
             } else {
               const temp_keyCode = character.toUpperCase().charCodeAt(0) - 65;
-              temp_cell_color[curr_row][extra_1[i]] = "#3a3a3c"; //yellow color
+              temp_cell_color[curr_row][extra_1[i]] = colors.dark_grey;
               if (
-                temp_keyboardKeyColor[temp_keyCode] !== "#6aaa64" && //green color
-                temp_keyboardKeyColor[temp_keyCode] !== "#c9b458" //yellow color
+                temp_keyboardKeyColor[temp_keyCode] !== colors.green &&
+                temp_keyboardKeyColor[temp_keyCode] !== colors.yellow
               ) {
-                temp_keyboardKeyColor[temp_keyCode] = "#3a3a3c";
+                temp_keyboardKeyColor[temp_keyCode] = colors.dark_grey;
               }
             }
           }
@@ -231,7 +237,7 @@ class App extends Component {
                         width: sz_h,
                         height: sz_h,
                         margin: 5,
-                        border: "5px solid #212121",
+                        border: "5px solid " + colors.very_dark_grey,
                       }}
                     >
                       <p
@@ -309,7 +315,7 @@ class App extends Component {
                         <Button
                           variant="contained"
                           style={{
-                            background: "#818384",
+                            background: colors.grey,
                             maxWidth: sz_w,
                             minWidth: sz_w,
                             maxHeight: sz_h,
