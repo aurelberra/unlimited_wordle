@@ -47,104 +47,83 @@ class App extends Component {
   }
 
   handleOnKeyPress = async (e) => {
-    console.log(e.key);
     if (e.ctrlKey || e.altKey || e.shiftKey || this.state.game_over) {
       return;
     }
-    if (e.keyCode >= 65 && e.keyCode <= 90) {
-      let temp_currow = this.state.prevrow.valueOf();
-      let temp_currcol = this.state.prevcol.valueOf();
-      if (temp_currcol <= 3) {
-        temp_currcol++;
-        let temp_value = [...this.state.value];
-        temp_value[temp_currow][temp_currcol] = e.key.toLowerCase();
-        this.setState({
-          prevrow: temp_currow,
-          prevcol: temp_currcol,
-          value: temp_value,
-        });
-      }
-    } else if (e.keyCode === 8) {
-      // Backspace
-      let temp_prevrow = this.state.prevrow.valueOf();
-      let temp_prevcol = this.state.prevcol.valueOf();
+    console.log(e.key);
+    let curr_row = this.state.prevrow.valueOf();
+    let curr_col = this.state.prevcol.valueOf();
+    if (e.keyCode >= 65 && e.keyCode <= 90 && curr_col <= 3) {
+      curr_col++;
       let temp_value = [...this.state.value];
-      temp_value[temp_prevrow][temp_prevcol] = "";
-      if (temp_prevcol >= 0) {
-        temp_prevcol--;
-      } else {
-        return;
-      }
+      temp_value[curr_row][curr_col] = e.key.toLowerCase();
       this.setState({
-        prevrow: temp_prevrow,
-        prevcol: temp_prevcol,
+        prevrow: curr_row,
+        prevcol: curr_col,
         value: temp_value,
       });
-    } else if (e.keyCode === 13) {
+    } else if (e.keyCode === 8 && curr_col >= 0) {
+      // Backspace
+      let temp_value = [...this.state.value];
+      temp_value[curr_row][curr_col] = "";
+      curr_col--;
+      this.setState({
+        prevrow: curr_row,
+        prevcol: curr_col,
+        value: temp_value,
+      });
+    } else if (e.keyCode === 13 && curr_col === 4) {
       // Enter
-      let curr_row = this.state.prevrow.valueOf();
-      let curr_col = this.state.prevcol.valueOf();
-      if (curr_col === 4) {
-        let word = "";
+      let word = "";
+      for (let i = 0; i < 5; ++i) {
+        word += this.state.value[curr_row][i].valueOf();
+      }
+      if (combined_strings_set.has(word)) {
+        let temp_cell_color = [...this.state.cell_color];
+        let extra_1 = [];
+        let extra_2 = new Set();
+        let temp_keyboard_key_color = [...this.state.keyboard_key_color];
         for (let i = 0; i < 5; ++i) {
-          word += this.state.value[curr_row][i].valueOf();
-        }
-        if (combined_strings_set.has(word)) {
-          let temp_cell_color = [...this.state.cell_color];
-          let extra_1 = [];
-          let extra_2 = new Set();
-          let temp_keyboard_key_color = [...this.state.keyboard_key_color];
-          for (let i = 0; i < 5; ++i) {
-            if (word[i] === curr_answer[i]) {
-              temp_cell_color[curr_row][i] = colors.green; //green color
-              const temp_keyCode = word[i].toUpperCase().charCodeAt(0) - 65;
-              temp_keyboard_key_color[temp_keyCode] = colors.green; //green color
-            } else {
-              extra_1.push(i);
-              extra_2.add(curr_answer[i]);
-            }
-          }
-          for (let i = 0; i < extra_1.length; ++i) {
-            const character = word[extra_1[i]];
-            if (extra_2.has(character)) {
-              const temp_keyCode = character.toUpperCase().charCodeAt(0) - 65;
-              if (temp_keyboard_key_color[temp_keyCode] !== colors.green) {
-                temp_keyboard_key_color[temp_keyCode] = colors.yellow;
-              }
-              temp_cell_color[curr_row][extra_1[i]] = colors.yellow;
-              extra_2.delete(character);
-            } else {
-              const temp_keyCode = character.toUpperCase().charCodeAt(0) - 65;
-              temp_cell_color[curr_row][extra_1[i]] = colors.dark_grey;
-              if (
-                temp_keyboard_key_color[temp_keyCode] !== colors.green &&
-                temp_keyboard_key_color[temp_keyCode] !== colors.yellow
-              ) {
-                temp_keyboard_key_color[temp_keyCode] = colors.dark_grey;
-              }
-            }
-          }
-          if (curr_row <= 4) {
-            curr_row++;
-            curr_col = -1;
+          if (word[i] === curr_answer[i]) {
+            temp_cell_color[curr_row][i] = colors.green; //green color
+            const temp_keyCode = word[i].toUpperCase().charCodeAt(0) - 65;
+            temp_keyboard_key_color[temp_keyCode] = colors.green; //green color
           } else {
-            this.setState({
-              game_over: true,
-            });
-            console.log("Game Over");
+            extra_1.push(i);
+            extra_2.add(curr_answer[i]);
           }
-          this.setState({
-            cell_color: temp_cell_color,
-            prevrow: curr_row,
-            prevcol: curr_col,
-            keyboard_key_color: temp_keyboard_key_color,
-            game_over: word === curr_answer,
-          });
-        } else {
-          console.log(word + "is not valid");
         }
+        for (let i = 0; i < extra_1.length; ++i) {
+          const character = word[extra_1[i]];
+          if (extra_2.has(character)) {
+            const temp_keyCode = character.toUpperCase().charCodeAt(0) - 65;
+            if (temp_keyboard_key_color[temp_keyCode] !== colors.green) {
+              temp_keyboard_key_color[temp_keyCode] = colors.yellow;
+            }
+            temp_cell_color[curr_row][extra_1[i]] = colors.yellow;
+            extra_2.delete(character);
+          } else {
+            const temp_keyCode = character.toUpperCase().charCodeAt(0) - 65;
+            temp_cell_color[curr_row][extra_1[i]] = colors.dark_grey;
+            if (
+              temp_keyboard_key_color[temp_keyCode] !== colors.green &&
+              temp_keyboard_key_color[temp_keyCode] !== colors.yellow
+            ) {
+              temp_keyboard_key_color[temp_keyCode] = colors.dark_grey;
+            }
+          }
+        }
+        curr_row++;
+        curr_col = -1;
+        this.setState({
+          cell_color: temp_cell_color,
+          prevrow: curr_row,
+          prevcol: curr_col,
+          keyboard_key_color: temp_keyboard_key_color,
+          game_over: (word === curr_answer) | (curr_row === 6),
+        });
       } else {
-        console.log("word size must be 5");
+        console.log(word + " is not valid");
       }
     }
   };
