@@ -48,6 +48,11 @@ class App extends Component {
     };
   }
 
+  componentDidMount() {
+    console.log(curr_answer);
+    document.addEventListener("keydown", this.handleOnKeyPress, false);
+  }
+
   handleOnKeyPress = (e) => {
     if (e.ctrlKey || e.altKey || e.shiftKey || this.state.game_over) {
       return;
@@ -147,12 +152,7 @@ class App extends Component {
     document.dispatchEvent(event);
   };
 
-  componentDidMount() {
-    console.log(curr_answer);
-    document.addEventListener("keydown", this.handleOnKeyPress, false);
-  }
-
-  RenderButton(button) {
+  renderButton = (button) => {
     if (button === "Enter") {
       return <CheckIcon style={{ color: "white", margin: "0.7vw" }} />;
     } else if (button === "Backspace") {
@@ -160,7 +160,7 @@ class App extends Component {
     } else {
       return <p style={{ margin: "0.7vw" }}>{button}</p>;
     }
-  }
+  };
 
   render() {
     return (
@@ -271,7 +271,7 @@ class App extends Component {
                         this.handleKeyboard(index_value);
                       }}
                     >
-                      {this.RenderButton(index_value)}
+                      {this.renderButton(index_value)}
                     </button>
                   );
                 })}
