@@ -5,6 +5,7 @@ import "./App.css";
 import BackspaceIcon from "@mui/icons-material/Backspace";
 import CheckIcon from "@mui/icons-material/Check";
 import Stack from "@mui/material/Stack";
+import Modal from "@mui/material/Modal";
 
 const colors = {
   green: "#6aaa64",
@@ -33,7 +34,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      game_over: false,
+      game_over: 0,
       prevrow: 0,
       prevcol: -1,
       value: Array(6)
@@ -43,10 +44,11 @@ class App extends Component {
         .fill(0)
         .map(() => new Array(5).fill(colors.black)),
       keyboard_key_color: Array(26).fill(colors.grey),
+      modal_open: false,
     };
   }
 
-  handleOnKeyPress = async (e) => {
+  handleOnKeyPress = (e) => {
     if (e.ctrlKey || e.altKey || e.shiftKey || this.state.game_over) {
       return;
     }
@@ -120,7 +122,7 @@ class App extends Component {
           prevrow: curr_row,
           prevcol: curr_col,
           keyboard_key_color: temp_keyboard_key_color,
-          game_over: (word === curr_answer) | (curr_row === 6),
+          game_over: word === curr_answer ? 2 : curr_row === 6 ? 1 : 0,
         });
       } else {
         console.log(word + " is not valid");
@@ -163,10 +165,44 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <Modal
+          open={this.state.game_over !== 0}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "black",
+              width: "50%",
+              height: "50%",
+              color: "white",
+              textAlign: "center",
+              fontSize: "3vh",
+            }}
+          >
+            <p>
+              {this.state.game_over === 2
+                ? "You Won!!"
+                : "Oops! the word was " + curr_answer}
+            </p>
+            <br />
+            <button
+              style={{ color: "black" }}
+              onClick={() => {
+                window.location.reload(false);
+              }}
+            >
+              <p>New Game</p>
+            </button>
+          </div>
+        </Modal>
         <nav style={{ height: "5vh" }}>
           <h1 style={{ fontSize: "4.5vh" }}>Unlimited Wordle</h1>
         </nav>
-        <div className="wordle_grid" style={{ marginTop: "5vh" }}>
+        <div style={{ marginTop: "5vh" }}>
           {this.state.value.map((name, index) => {
             return (
               <Stack
