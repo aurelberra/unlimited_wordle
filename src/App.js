@@ -4,7 +4,6 @@ import React, { Component } from "react";
 import "./App.css";
 import BackspaceIcon from "@mui/icons-material/Backspace";
 import CheckIcon from "@mui/icons-material/Check";
-import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 
 const colors = {
@@ -15,19 +14,18 @@ const colors = {
   dark_grey: "#3a3a3c",
   very_dark_grey: "#212121",
 };
-const mx = text_answers.split("\n").length - 1;
 const answers_strings = text_answers.split("\n");
+const answers_strings_size = answers_strings.length - 1;
 const combined_strings_set = new Set([
   ...text_allowed.split("\n"),
-  ...text_answers.split("\n"),
+  ...answers_strings,
 ]);
 const OnScreenKeyboard = [
   ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
   ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
   ["Enter", "Z", "X", "C", "V", "B", "N", "M", "Backspace"],
 ];
-
-const random_key = Math.floor(Math.random() * mx);
+const random_key = Math.floor(Math.random() * answers_strings_size);
 const curr_answer = answers_strings[random_key];
 
 class App extends Component {
@@ -42,33 +40,23 @@ class App extends Component {
       prevcol: -1,
       value: Array(6)
         .fill(0)
-        .map((row) => new Array(5).fill("")),
+        .map(() => new Array(5).fill("")),
       cell_color: Array(6)
         .fill(0)
-        .map((row) => new Array(5).fill(colors.black)),
-
-      KeyboardKeyColor: Array(26).fill(colors.grey),
+        .map(() => new Array(5).fill(colors.black)),
+      keyboard_key_color: Array(26).fill(colors.grey),
     };
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
   }
 
   handleOnKeyPress = async (e) => {
     console.log(e.key);
-    if (e.ctrlKey) {
-      return;
-    }
-    if (e.altKey) {
-      return;
-    }
-    if (this.state.game_over) {
+    if (e.ctrlKey || e.altKey || e.shiftKey || this.state.game_over) {
       return;
     }
     if (e.keyCode >= 65 && e.keyCode <= 90) {
       let temp_currow = this.state.prevrow.valueOf();
-      console.log(this.state.prevrow);
       let temp_currcol = this.state.prevcol.valueOf();
-      console.log(temp_currow);
-      console.log(temp_currcol);
       if (temp_currcol <= 3) {
         temp_currcol++;
         let temp_value = [...this.state.value];
@@ -81,7 +69,7 @@ class App extends Component {
         });
       }
     } else if (e.keyCode === 8) {
-      //backspace
+      // Backspace
       let temp_prevrow = this.state.prevrow.valueOf();
       let temp_prevcol = this.state.prevcol.valueOf();
       let temp_value = [...this.state.value];
@@ -97,7 +85,7 @@ class App extends Component {
         value: temp_value,
       });
     } else if (e.keyCode === 13) {
-      //enter
+      // Enter
       let curr_row = this.state.prevrow.valueOf();
       let curr_col = this.state.prevcol.valueOf();
       if (curr_col === 4) {
@@ -109,12 +97,12 @@ class App extends Component {
           let temp_cell_color = [...this.state.cell_color];
           let extra_1 = [];
           let extra_2 = new Set();
-          let temp_keyboardKeyColor = [...this.state.KeyboardKeyColor];
+          let temp_keyboard_key_color = [...this.state.keyboard_key_color];
           for (let i = 0; i < 5; ++i) {
             if (word[i] === curr_answer[i]) {
               temp_cell_color[curr_row][i] = colors.green; //green color
               const temp_keyCode = word[i].toUpperCase().charCodeAt(0) - 65;
-              temp_keyboardKeyColor[temp_keyCode] = colors.green; //green color
+              temp_keyboard_key_color[temp_keyCode] = colors.green; //green color
             } else {
               extra_1.push(i);
               extra_2.add(curr_answer[i]);
@@ -122,12 +110,10 @@ class App extends Component {
           }
           for (let i = 0; i < extra_1.length; ++i) {
             const character = word[extra_1[i]];
-            //console.log(character);
             if (extra_2.has(character)) {
-              //console.log("Has this character");
               const temp_keyCode = character.toUpperCase().charCodeAt(0) - 65;
-              if (temp_keyboardKeyColor[temp_keyCode] !== colors.green) {
-                temp_keyboardKeyColor[temp_keyCode] = colors.yellow;
+              if (temp_keyboard_key_color[temp_keyCode] !== colors.green) {
+                temp_keyboard_key_color[temp_keyCode] = colors.yellow;
               }
               temp_cell_color[curr_row][extra_1[i]] = colors.yellow;
               extra_2.delete(character);
@@ -135,10 +121,10 @@ class App extends Component {
               const temp_keyCode = character.toUpperCase().charCodeAt(0) - 65;
               temp_cell_color[curr_row][extra_1[i]] = colors.dark_grey;
               if (
-                temp_keyboardKeyColor[temp_keyCode] !== colors.green &&
-                temp_keyboardKeyColor[temp_keyCode] !== colors.yellow
+                temp_keyboard_key_color[temp_keyCode] !== colors.green &&
+                temp_keyboard_key_color[temp_keyCode] !== colors.yellow
               ) {
-                temp_keyboardKeyColor[temp_keyCode] = colors.dark_grey;
+                temp_keyboard_key_color[temp_keyCode] = colors.dark_grey;
               }
             }
           }
@@ -156,7 +142,7 @@ class App extends Component {
             cell_color: temp_cell_color,
             prevrow: curr_row,
             prevcol: curr_col,
-            KeyboardKeyColor: temp_keyboardKeyColor,
+            keyboard_key_color: temp_keyboard_key_color,
             game_over: word === curr_answer,
           });
         } else {
@@ -171,20 +157,20 @@ class App extends Component {
   };
 
   handleKeyboard = (value) => {
-    var temp_keyCode;
+    let pressed_keyCode;
     if (value === "Backspace") {
-      temp_keyCode = 8;
+      pressed_keyCode = 8;
     } else if (value === "Enter") {
-      temp_keyCode = 13;
+      pressed_keyCode = 13;
     } else {
-      temp_keyCode = value.charCodeAt(0);
+      pressed_keyCode = value.charCodeAt(0);
     }
-    const spaceEvnt = new KeyboardEvent("keydown", {
+    const event = new KeyboardEvent("keydown", {
       key: value,
-      keyCode: temp_keyCode,
-      which: temp_keyCode,
+      keyCode: pressed_keyCode,
+      which: pressed_keyCode,
     });
-    document.dispatchEvent(spaceEvnt);
+    document.dispatchEvent(event);
   };
 
   componentDidMount() {
@@ -204,19 +190,26 @@ class App extends Component {
     });
   }
 
+  RenderButton(button) {
+    if (button === "Enter") {
+      return <CheckIcon style={{ color: "white", margin: "0.7vw" }} />;
+    } else if (button === "Backspace") {
+      return <BackspaceIcon style={{ color: "white", margin: "0.7vw" }} />;
+    } else {
+      return <p style={{ margin: "0.7vw" }}>{button}</p>;
+    }
+  }
+
   render() {
-    console.log("window width = " + this.state.window_width);
-    console.log("window width = " + this.state.window_height);
-    console.log("rerender");
     console.log(curr_answer);
     return (
       <div className="App">
-        <nav>
-          <h1>Unlimited Wordle</h1>
+        <nav style={{ height: "5vh" }}>
+          <h1 style={{ fontSize: "4.5vh" }}>Unlimited Wordle</h1>
         </nav>
-        <div className="wordle_grid" style={{ marginTop: 30 }}>
+        <div className="wordle_grid" style={{ marginTop: "5vh" }}>
           {this.state.value.map((name, index) => {
-            var sz_h = (2 * this.state.window_height) / 30;
+            let sz_h = (2 * this.state.window_height) / 30;
             if (sz_h > 100) {
               sz_h = 100;
             }
@@ -236,20 +229,17 @@ class App extends Component {
                         backgroundColor: `${this.state.cell_color[index][cindex]}`,
                         width: sz_h,
                         height: sz_h,
-                        margin: 5,
+                        margin: "0.5vh",
                         border: "5px solid " + colors.very_dark_grey,
+                        color: "white",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontWeight: "bold",
+                        fontSize: "4vh",
                       }}
                     >
-                      <p
-                        style={{
-                          color: "white",
-                          textAlign: "center",
-                          fontWeight: "bold",
-                          fontSize: 25,
-                        }}
-                      >
-                        {index_value.toUpperCase()}
-                      </p>
+                      {index_value.toUpperCase()}
                     </div>
                   );
                 })}
@@ -261,85 +251,37 @@ class App extends Component {
           style={{
             position: "absolute",
             bottom: 0,
-            alignContent: "center",
             left: 0,
             right: 0,
           }}
         >
           {OnScreenKeyboard.map((name, index) => {
-            var sz_w = Math.floor(this.state.window_width / name.length);
-            if (sz_w > 100) {
-              sz_w = 100;
-            }
-            var sz_h = Math.floor(this.state.window_height / 9);
-            if (sz_h > 100) {
-              sz_h = 100;
-            }
-            console.log(sz_w);
-            console.log(sz_h);
             return (
-              <Stack
-                key={index}
-                direction="row"
-                justifyContent="center"
-                alignItems="flex-end"
-                spacing={1}
-              >
+              <Stack key={index} direction="row" justifyContent="center">
                 {name.map((index_value, cindex) => {
                   return (
-                    <div key={`${index}${cindex}`} style={{ margin: "1px" }}>
-                      {index_value !== "Backspace" &&
-                      index_value !== "Enter" ? (
-                        <Button
-                          variant="contained"
-                          style={{
-                            backgroundColor:
-                              this.state.KeyboardKeyColor[
+                    <button
+                      key={`${index}${cindex}`}
+                      style={{
+                        borderRadius: 10,
+                        backgroundColor:
+                          index_value !== "Backspace" && index_value !== "Enter"
+                            ? this.state.keyboard_key_color[
                                 index_value.charCodeAt(0) - 65
-                              ],
-                            textAlign: "center",
-                            fontWeight: "bold",
-                            maxWidth: sz_w,
-                            minWidth: sz_w,
-                            maxHeight: sz_h,
-                            minHeight: sz_h,
-                            margin: 5,
-                          }}
-                          onClick={() => {
-                            this.handleKeyboard(index_value);
-                          }}
-                        >
-                          <p style={{ fontSize: 30 }}>{index_value}</p>
-                        </Button>
-                      ) : (
-                        <Button
-                          variant="contained"
-                          style={{
-                            background: colors.grey,
-                            maxWidth: sz_w,
-                            minWidth: sz_w,
-                            maxHeight: sz_h,
-                            minHeight: sz_h,
-                            margin: 5,
-                          }}
-                          onClick={() => {
-                            this.handleKeyboard(index_value);
-                          }}
-                        >
-                          {index_value === "Enter" ? (
-                            <CheckIcon
-                              fontSize="medium"
-                              style={{ color: "white" }}
-                            />
-                          ) : (
-                            <BackspaceIcon
-                              fontSize="medium"
-                              style={{ color: "white" }}
-                            />
-                          )}
-                        </Button>
-                      )}
-                    </div>
+                              ]
+                            : colors.grey,
+                        fontWeight: "bold",
+                        height: "8vh",
+                        margin: "0.4vh",
+                        fontSize: "2vh",
+                        color: "white",
+                      }}
+                      onClick={() => {
+                        this.handleKeyboard(index_value);
+                      }}
+                    >
+                      {this.RenderButton(index_value)}
+                    </button>
                   );
                 })}
               </Stack>

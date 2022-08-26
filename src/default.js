@@ -52,7 +52,4 @@ for (i = 0; i < 5; ++i) {
 }
 
 default_value[0].autoFocus = true;
-console.log(default_value_row.inputProps[0].disabled);
-console.log(default_value[0].inputProps[0].disabled);
-console.log(default_value[1].inputProps[0].disabled);
 export default default_value;
