@@ -33,8 +33,6 @@ class App extends Component {
     super(props);
 
     this.state = {
-      window_width: 0,
-      window_height: 0,
       game_over: false,
       prevrow: 0,
       prevcol: -1,
@@ -46,7 +44,6 @@ class App extends Component {
         .map(() => new Array(5).fill(colors.black)),
       keyboard_key_color: Array(26).fill(colors.grey),
     };
-    this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
   }
 
   handleOnKeyPress = async (e) => {
@@ -60,7 +57,6 @@ class App extends Component {
       if (temp_currcol <= 3) {
         temp_currcol++;
         let temp_value = [...this.state.value];
-        console.log(temp_value);
         temp_value[temp_currow][temp_currcol] = e.key.toLowerCase();
         this.setState({
           prevrow: temp_currow,
@@ -132,7 +128,6 @@ class App extends Component {
             curr_row++;
             curr_col = -1;
           } else {
-            console.log("curr_row = " + curr_row);
             this.setState({
               game_over: true,
             });
@@ -146,11 +141,9 @@ class App extends Component {
             game_over: word === curr_answer,
           });
         } else {
-          console.log("word = " + word);
-          console.log("Not a valid word");
+          console.log(word + "is not valid");
         }
       } else {
-        console.log("curr_col = " + curr_col);
         console.log("word size must be 5");
       }
     }
@@ -174,20 +167,8 @@ class App extends Component {
   };
 
   componentDidMount() {
-    this.updateWindowDimensions();
-    window.addEventListener("resize", this.updateWindowDimensions);
+    console.log(curr_answer);
     document.addEventListener("keydown", this.handleOnKeyPress, false);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener("resize", this.updateWindowDimensions);
-  }
-
-  updateWindowDimensions() {
-    this.setState({
-      window_width: window.innerWidth,
-      window_height: window.innerHeight,
-    });
   }
 
   RenderButton(button) {
@@ -201,7 +182,6 @@ class App extends Component {
   }
 
   render() {
-    console.log(curr_answer);
     return (
       <div className="App">
         <nav style={{ height: "5vh" }}>
@@ -209,10 +189,6 @@ class App extends Component {
         </nav>
         <div className="wordle_grid" style={{ marginTop: "5vh" }}>
           {this.state.value.map((name, index) => {
-            let sz_h = (2 * this.state.window_height) / 30;
-            if (sz_h > 100) {
-              sz_h = 100;
-            }
             return (
               <Stack
                 key={index}
@@ -227,8 +203,8 @@ class App extends Component {
                       key={`${index}${cindex}`}
                       style={{
                         backgroundColor: `${this.state.cell_color[index][cindex]}`,
-                        width: sz_h,
-                        height: sz_h,
+                        width: "6vh",
+                        height: "6vh",
                         margin: "0.5vh",
                         border: "5px solid " + colors.very_dark_grey,
                         color: "white",
