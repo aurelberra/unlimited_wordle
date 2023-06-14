@@ -200,12 +200,12 @@ class App extends Component {
                 window.location.reload(false);
               }}
             >
-              <p>New Game</p>
+              <p style={{ fontSize: "2vh" }}>New Game</p>
             </button>
           </div>
         </Modal>
         <nav style={{ height: "5vh" }}>
-          <h1 style={{ fontSize: "4.5vh" }}>Wordle du 16 juin</h1>
+          <h1 style={{ fontSize: "4.5vh", color: "purple" }}>Wordle du 16 juin</h1>
         </nav>
         <div style={{ marginTop: "5vh" }}>
           {this.state.value.map((name, index) => {
