@@ -22,9 +22,11 @@ const combined_strings_set = new Set([
   ...answers_strings,
 ]);
 const OnScreenKeyboard = [
-    ["P", "A", "S", "C", "L", "E", "J", "O", "Y"],
-    ["U", "X", "N", "V", "R", "Q", "W", "Z", "I", "G"],
-    ["Backspace", "B", "D", "F", "H", "K", "M", "T", "Enter"],
+    ["J", "O", "Y", "E", "U", "X", "A", "N", "N", "I"],
+    ["V", "E", "R", "S", "A", "I", "R", "E"],
+    ["P", "A", "S", "C", "A", "L", "E"],
+    ["B", "D", "Q", "W", "Z", "I", "G"],
+    ["Backspace", "F", "H", "K", "M", "T", "Enter"],
 //   ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
 //   ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
 //   ["Backspace", "Z", "X", "C", "V", "B", "N", "M", "Enter"],
@@ -157,11 +159,11 @@ class App extends Component {
 
   renderButton = (button) => {
     if (button === "Enter") {
-      return <CheckIcon style={{ color: "white", margin: "0.5vw" }} />;
+      return <CheckIcon style={{ color: "white", margin: "0.6vw" }} />;
     } else if (button === "Backspace") {
-      return <BackspaceIcon style={{ color: "white", margin: "0.5vw" }} />;
+      return <BackspaceIcon style={{ color: "white", margin: "0.6vw" }} />;
     } else {
-      return <p style={{ margin: "0.5vw" }}>{button}</p>;
+      return <p style={{ margin: "0.6vw" }}>{button}</p>;
     }
   };
 
@@ -265,9 +267,9 @@ class App extends Component {
                               ]
                             : colors.grey,
                         fontWeight: "bold",
-                        height: "6vh",
+                        height: "7vh",
                         margin: "0.2vh",
-                        fontSize: "1.5vh",
+                        fontSize: "2vh",
                         color: "white",
                       }}
                       onClick={() => {
