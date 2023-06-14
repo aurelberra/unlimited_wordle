@@ -22,7 +22,7 @@ const combined_strings_set = new Set([
   ...answers_strings,
 ]);
 const OnScreenKeyboard = [
-    ["P", "A", "S", "C", "A", "L", "E", "J", "O", "Y", "E"],
+    ["P", "A", "S", "C", "L", "E", "J", "O", "Y"],
     ["U", "X", "N", "V", "R", "Q", "W", "Z", "I", "G"],
     ["Backspace", "B", "D", "F", "H", "K", "M", "T", "Enter"],
 //   ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
@@ -157,11 +157,11 @@ class App extends Component {
 
   renderButton = (button) => {
     if (button === "Enter") {
-      return <CheckIcon style={{ color: "white", margin: "0.7vw" }} />;
+      return <CheckIcon style={{ color: "white", margin: "0.5vw" }} />;
     } else if (button === "Backspace") {
-      return <BackspaceIcon style={{ color: "white", margin: "0.7vw" }} />;
+      return <BackspaceIcon style={{ color: "white", margin: "0.5vw" }} />;
     } else {
-      return <p style={{ margin: "0.7vw" }}>{button}</p>;
+      return <p style={{ margin: "0.5vw" }}>{button}</p>;
     }
   };
 
@@ -265,9 +265,9 @@ class App extends Component {
                               ]
                             : colors.grey,
                         fontWeight: "bold",
-                        height: "8vh",
-                        margin: "0.4vh",
-                        fontSize: "2vh",
+                        height: "6vh",
+                        margin: "0.2vh",
+                        fontSize: "1.5vh",
                         color: "white",
                       }}
                       onClick={() => {
