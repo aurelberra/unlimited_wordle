@@ -22,9 +22,12 @@ const combined_strings_set = new Set([
   ...answers_strings,
 ]);
 const OnScreenKeyboard = [
-  ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
-  ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
-  ["Enter", "Z", "X", "C", "V", "B", "N", "M", "Backspace"],
+    ["P", "A", "S", "C", "A", "L", "I", "N", "E"],
+    ["Z", "J", "O", "Y", "E", "U", "X", "V", "R", "T",],
+    ["Backspace", "B", "D", "F", "G", "H", "K", "Q", "W", "M", "Enter"],
+//   ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
+//   ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
+//   ["Backspace", "Z", "X", "C", "V", "B", "N", "M", "Enter"],
 ];
 const random_key = Math.floor(Math.random() * answers_strings_size);
 const curr_answer = answers_strings[random_key];
@@ -185,8 +188,8 @@ class App extends Component {
           >
             <p>
               {this.state.game_over === 2
-                ? "You Won!!"
-                : "Oops! the word was " + curr_answer}
+                ? "Bravissima! Guessed the gift?"
+                : "Try again!"}
             </p>
             <br />
             <button
@@ -200,7 +203,7 @@ class App extends Component {
           </div>
         </Modal>
         <nav style={{ height: "5vh" }}>
-          <h1 style={{ fontSize: "4.5vh" }}>Wordle_16</h1>
+          <h1 style={{ fontSize: "4.5vh" }}>Wordle du 16 juin</h1>
         </nav>
         <div style={{ marginTop: "5vh" }}>
           {this.state.value.map((name, index) => {
