@@ -22,8 +22,8 @@ const combined_strings_set = new Set([
   ...answers_strings,
 ]);
 const OnScreenKeyboard = [
-    ["J", "O", "Y", "E", "U", "X", "A", "N", "N", "I"],
-    ["V", "E", "R", "S", "A", "I", "R", "E"],
+    ["J", "O", "Y", "E", "U", "X",],
+    ["A", "N", "I", "V", "E", "R", "S"],
     ["P", "A", "S", "C", "A", "L", "E"],
     ["B", "D", "Q", "W", "Z", "I", "G"],
     ["Backspace", "F", "H", "K", "M", "T", "Enter"],
