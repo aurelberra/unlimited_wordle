@@ -200,7 +200,7 @@ class App extends Component {
           </div>
         </Modal>
         <nav style={{ height: "5vh" }}>
-          <h1 style={{ fontSize: "4.5vh" }}>Unlimited Wordle</h1>
+          <h1 style={{ fontSize: "4.5vh" }}>Wordle_16</h1>
         </nav>
         <div style={{ marginTop: "5vh" }}>
           {this.state.value.map((name, index) => {
