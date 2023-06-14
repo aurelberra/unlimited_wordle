@@ -188,9 +188,9 @@ class App extends Component {
               fontSize: "3vh",
             }}
           >
-            <p>
+            <p style={{ fontSize: "3vh", color: "purple", fontWeight: "bold" }}>
               {this.state.game_over === 2
-                ? "Bravissima! Guessed the gift?"
+                ? "Bravissima!\nGuessed the gift?"
                 : "Try again!"}
             </p>
             <br />
