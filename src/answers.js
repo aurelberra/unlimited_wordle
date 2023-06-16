@@ -1,4 +1,3 @@
-const text_answers = `gracq
-train
+const text_answers = `merci
 trone`;
 export default text_answers;
