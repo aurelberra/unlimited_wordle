@@ -1,4 +1,4 @@
 const text_answers = `gracq
 train
-trône`;
+trone`;
 export default text_answers;
