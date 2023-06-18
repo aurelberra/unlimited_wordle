@@ -1,4 +1,6 @@
-const text_answers = `trone
+const text_answers = `gracq
 merci
-trone`;
+train
+trone
+trone`; // bug: last word not used?
 export default text_answers;
